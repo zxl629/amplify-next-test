@@ -32,7 +32,7 @@ const schema = a.schema({
   DeviceMeasures: a
     .model({
       tenantId: a.string().required(),
-      name: a.string().required(),
+      name: a.string(),
       measures: a.customType({
         ts: a.integer(),
         pwr: a.integer(),
@@ -46,8 +46,8 @@ const schema = a.schema({
       }),
       recentMeasures: a.json(),
     })
-    .identifier(["tenantId", "name"])
-    .authorization((allow) => [allow.owner()]),
+    .identifier(["tenantId"])
+    .authorization((allow) => [allow.groupDefinedIn('tenantId')]),
 });
 
 export type Schema = ClientSchema<typeof schema>;

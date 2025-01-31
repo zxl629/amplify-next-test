@@ -8,7 +8,7 @@ import { Authenticator } from "@aws-amplify/ui-react";
 import { signOut } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
 
-const client = generateClient<Schema>();
+const client = generateClient<Schema>({authMode: "userPool"});
 
 export default function App() {
   // const [todos, setTodos] = useState<Schema["Todo"]["type"][]>([]);
@@ -18,8 +18,8 @@ export default function App() {
 
   async function createDevice() {
     const { data, errors } = await client.models.DeviceMeasures.create({
-      tenantId: "3",
-      name: "hello",
+      tenantId: "EDITORS3",
+      name: "random2",
     });
 
     console.log({ data, errors });
@@ -29,12 +29,12 @@ export default function App() {
     const subscription = client.models.DeviceMeasures.observeQuery({
       filter: {
         and: [
-          { tenantId: { eq: device?.tenantId } },
-          { name: { eq: device?.name } },
+          { tenantId: { eq: "EDITORS3"} },
         ],
       },
     }).subscribe({
       next: ({ items }) => {
+        console.log({items});
         setDeviceMeasures(items[0] || null);
       },
       error: (err) => {
